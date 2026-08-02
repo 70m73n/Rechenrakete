@@ -1,3 +1,7 @@
 # Local server output
 local-server.err.log
 local-server.out.log
+
+# Generated hosting build
+dist/
+*.tgz

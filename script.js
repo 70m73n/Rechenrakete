@@ -87,7 +87,7 @@ function xpInLevel(stars) { return stars%50; }
 function mapSize(s) { const level=levelFor(s.stars); return level>=7?8:level>=4?7:6; }
 function totalObjects(s) { return s.inventory.length+s.placements.length; }
 function toast(message) { const el=document.querySelector("#toast"); el.textContent=message; el.classList.add("show"); clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.classList.remove("show"),2500); }
-function shell(content,showGallery=false) { return `<header class="topbar"><div class="brand"><span class="brand-mark">R</span>Rechenrakete</div>${showGallery?`<button class="ghost" id="galleryBtn">Meine Welten</button>`:""}</header>${content}`; }
+function shell(content,showGallery=false) { return `<header class="topbar"><div class="brand"><span class="brand-mark">R</span>Rechenrakete</div><div class="top-actions">${showGallery?`<button class="ghost" id="galleryBtn">Meine Welten</button>`:""}<button class="ghost install-app" type="button" data-install-app>Installieren</button></div></header>${content}`; }
 
 function planetMark(planetId,small=false) {
   const p=getPlanet(planetId);
