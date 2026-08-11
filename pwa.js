@@ -80,6 +80,10 @@
   updateInstallState();
 
   if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
-    window.addEventListener("load", () => navigator.serviceWorker.register("./service-worker.js"));
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./service-worker.js").catch(() => {
+        if (typeof toast === "function") toast("Der Offline-Speicher konnte nicht vorbereitet werden. Online bleibt die App spielbar.");
+      });
+    });
   }
 })();

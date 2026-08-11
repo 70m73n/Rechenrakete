@@ -1,10 +1,12 @@
-const CACHE_NAME = "rechenrakete-v1";
+const CACHE_NAME = "rechenrakete-v2";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./styles.css",
   "./script.js",
   "./pwa.js",
+  "./fonts/baloo-2-latin.woff2",
+  "./fonts/nunito-latin.woff2",
   "./manifest.webmanifest",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
@@ -42,8 +44,24 @@ self.addEventListener("fetch", event => {
   }
 
   const url = new URL(request.url);
-  const isFont = url.hostname === "fonts.googleapis.com" || url.hostname === "fonts.gstatic.com";
-  if (url.origin !== self.location.origin && !isFont) return;
+  if (url.origin !== self.location.origin) return;
+
+  const isCriticalAppAsset = url.origin === self.location.origin &&
+    (request.destination === "script" || request.destination === "style");
+  if (isCriticalAppAsset) {
+    event.respondWith(
+      fetch(request)
+        .then(response => {
+          if (response.ok) {
+            const copy = response.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
+          }
+          return response;
+        })
+        .catch(() => caches.match(request))
+    );
+    return;
+  }
 
   event.respondWith(
     caches.match(request).then(cached => {
