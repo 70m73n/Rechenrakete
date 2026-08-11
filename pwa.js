@@ -15,6 +15,7 @@
   }
 
   function showInstallHelp() {
+    const opener = document.activeElement;
     const text = isIOS()
       ? "Tippe in Safari auf Teilen und danach auf „Zum Home-Bildschirm“."
       : "Öffne das Browser-Menü und wähle „App installieren“ oder „Zum Startbildschirm hinzufügen“.";
@@ -23,11 +24,24 @@
     modal.setAttribute("role", "dialog");
     modal.setAttribute("aria-modal", "true");
     modal.setAttribute("aria-labelledby", "installTitle");
-    modal.innerHTML = `<div class="pwa-install-card"><img class="pwa-install-icon" src="icons/icon-192.png" alt=""><h2 id="installTitle">Rechenrakete installieren</h2><p>${text}</p><button class="primary" type="button" data-close-install>Verstanden</button></div>`;
+    modal.setAttribute("aria-describedby", "installHelp");
+    modal.innerHTML = `<div class="pwa-install-card"><img class="pwa-install-icon" src="icons/icon-192.png" alt=""><h2 id="installTitle">Rechenrakete installieren</h2><p id="installHelp">${text}</p><button class="primary" type="button" data-close-install>Verstanden</button></div>`;
     document.body.appendChild(modal);
-    modal.querySelector("[data-close-install]").focus();
+    const close = () => {
+      modal.remove();
+      if (opener?.isConnected) opener.focus();
+    };
+    const closeButton = modal.querySelector("[data-close-install]");
+    closeButton.focus();
+    modal.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        close();
+      }
+      if (event.key === "Tab") event.preventDefault();
+    });
     modal.addEventListener("click", event => {
-      if (event.target === modal || event.target.closest("[data-close-install]")) modal.remove();
+      if (event.target === modal || event.target.closest("[data-close-install]")) close();
     });
   }
 
