@@ -1,9 +1,9 @@
-const CACHE_NAME = "rechenrakete-v2";
+const CACHE_NAME = "rechenrakete-v4";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./styles.css",
-  "./script.js",
+  "./styles.css?v=4",
+  "./script.js?v=4",
   "./pwa.js",
   "./fonts/baloo-2-latin.woff2",
   "./fonts/nunito-latin.woff2",
